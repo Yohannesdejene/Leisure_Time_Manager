@@ -342,6 +342,7 @@ app.get("/posts/:page", async (req, res) => {
   try {
     // retrieve a subset of posts with associated images and user data
     const { count, rows } = await Post.findAndCountAll({
+      order: [["createdAt", "DESC"]],
       include: [
         { model: Picture },
         { model: CommentPost },
@@ -382,6 +383,7 @@ app.get("/posts/:page", async (req, res) => {
     res.status(500).send("Error retrieving posts");
   }
 });
+
 app.get("/personposts/:id", async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const pageSize = 10;
@@ -594,7 +596,6 @@ app.get("/comments", async (req, res) => {
     res.status(500).json({ message: "Failed to fetch comments" });
   }
 });
-
 app.post("/like", async (req, res) => {
   const { action, postId } = req.body;
 
@@ -642,6 +643,7 @@ app.post("/commentonproduct", authCheck, async (req, res) => {
     res.status(500).json({ message: "Failed to create comment" });
   }
 });
+
 app.get("/commentonproduct", async (req, res) => {
   const productId = req.query.productId;
   const page = req.query.page || 1;

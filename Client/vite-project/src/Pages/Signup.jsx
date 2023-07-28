@@ -346,7 +346,7 @@ function BuyerForm() {
               Already have an account ?
               <b>
                 <a
-                  href="sel/login"
+                  href="/login"
                   style={{
                     color: "brown",
                     textDecoration: "none",

@@ -21,6 +21,7 @@ import {
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import axios from "axios";
+import Avatar from "@mui/material/Avatar";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 
 export default function NavBar(props) {
@@ -113,7 +114,10 @@ export default function NavBar(props) {
         withCredentials: true,
       })
       .then((response) => {
+        setProfileData(response.data);
         // console.log("fetched data", response.data);
+        console.log("profile data", response.data);
+
         const data = response.data;
         console.log("loggedin in");
         setLoggedin(true);
@@ -232,7 +236,13 @@ export default function NavBar(props) {
                   onClick={handleProfileMenuOpen}
                   color="inherit"
                 >
-                  <AccountCircle sx={{ color: "black" }} />
+                  {/* <AccountCircle sx={{ color: "black" }} /> */}
+                  <Avatar
+                    alt="Travis Howard"
+                    sx={{ marginRight: "5px" }}
+                    src={`http://localhost:3000/personimages/${profileData.image} `}
+                  />
+
                   <Typography
                     sx={{
                       fontFamily: "Monospace",
@@ -240,10 +250,6 @@ export default function NavBar(props) {
                       display: { xs: "none", md: "flex", color: "black" },
                     }}
                   >
-                    {" "}
-                    {/* {state &&  state.data.fname} */}
-                    {/* {state !== null ? <>{state.data.fname}</> : <>Profile</>} */}
-                    {/* {"Profile"} */}
                     Profile
                   </Typography>
                 </IconButton>

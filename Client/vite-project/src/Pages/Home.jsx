@@ -44,10 +44,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
   },
-
-  "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
-  },
 }));
 
 function BootstrapDialogTitle(props) {
@@ -105,6 +101,10 @@ const add = [1, 2, 3, 4, 5, 6, 4, 5, 6, 7, 7, 8, 9, 9];
 function Home(props) {
   const [create, setCreate] = useState(false);
   const [openPost, setOpenPost] = useState(false);
+
+  /////open images
+  const [showImage, setShowImage] = useState(Array(100).fill(false));
+
   ////commetn things
   const [showComment, setShowComment] = useState(Array(100).fill(false));
   const [comments, setComments] = useState(Array(10).fill(""));
@@ -564,6 +564,21 @@ function Home(props) {
     }
   };
 
+  const handleCloseImage = async (postId, postIndex) => {
+    setShowImage((prevArray) => {
+      const updatedArray = [...prevArray];
+      updatedArray[postIndex] = !updatedArray[postIndex];
+      return updatedArray;
+    });
+  };
+  const handleDisplayImage = async (postId, postIndex) => {
+    setShowImage((prevArray) => {
+      const updatedArray = [...prevArray];
+      updatedArray[postIndex] = !updatedArray[postIndex];
+      return updatedArray;
+    });
+  };
+
   useEffect(() => {
     console.log("in the home useEffect");
     axios
@@ -621,6 +636,7 @@ function Home(props) {
 
           display: "flex",
           justifyContent: "center",
+          backgroundColor: "grey",
         }}
       >
         {/* <NavBar /> */}
@@ -650,7 +666,7 @@ function Home(props) {
                       border: "none",
                       // backgroundColor: "red",
                       textTransform: "unset",
-                      color: "black",
+                      color: "white",
                       width: {
                         lg: "170px",
                         md: "170px",
@@ -664,7 +680,7 @@ function Home(props) {
                       // },
                     }}
                   >
-                    <AddBoxIcon sx={{ color: "black" }} />
+                    <AddBoxIcon sx={{ color: "white" }} />
                     Create Post
                   </Button>
 
@@ -676,7 +692,7 @@ function Home(props) {
                     <Button
                       sx={{
                         float: "right",
-                        color: "black",
+                        color: "white",
                         ml: {
                           xs: "10px",
                           sm: "15px",
@@ -686,7 +702,7 @@ function Home(props) {
                       }}
                       onClick={handlCreate}
                     >
-                      <RecommendIcon sx={{ color: "black" }} />
+                      <RecommendIcon sx={{ color: "white" }} />
                       Recommend Me Place
                     </Button>
                   </Link>
@@ -702,17 +718,9 @@ function Home(props) {
                           // elevation={2}
                           sx={{
                             marginTop: "10px",
-
+                            backgroundColor: "#F5F3F3 ",
                             border: "1px solid #E0DFDF",
-                            // ml: {
-                            //   lg: "33%",
-                            //   md: "30%",
-                            //   sm: "20%",
-                            // },
-                            // mr: {
-                            //   md: "20%",
-                            //   sm: "15%",
-                            // },
+
                             width: {
                               lg: "500px",
                               md: "550px",
@@ -749,14 +757,17 @@ function Home(props) {
                             sx={{
                               // display: "flex",
                               // flexDirection: "column",
-                              width: {
-                                lg: "80%",
-                                md: "70%",
-                                sm: "70%",
-                                xs: "70%",
-                              },
+
+                              // width: {
+                              //   lg: "100%",
+                              //   md: "100%",
+                              //   sm: "100%",
+                              //   xs: "100%",
+                              // },
+
                               display: "flex",
                               alignItems: "center",
+
                               // width: {
                               //   lg: "500px",
                               //   md: "500px",
@@ -774,23 +785,23 @@ function Home(props) {
                               <ChevronLeftIcon />
                             </Button>
                             {post.Pictures && post.Pictures.length > 0 && (
-                              <img
-                                style={{
-                                  width: "100%",
-                                  height: "300px",
-                                  // height: {
-                                  //   lg: "300px",
-                                  //   md: "300px",
-                                  //   sm: "300px",
-                                  //   xs: "100px",
-                                  // },
+                              <Button
+                                onClick={() => {
+                                  handleDisplayImage(post.id, postIndex);
                                 }}
-                                src={`http://localhost:3000/images/${
-                                  // post.Pictures[postIndex].id
-                                  post.Pictures[currentImages[postIndex]].id
-                                }`}
-                                alt={`Post Image ${currentImages[postIndex]}`}
-                              />
+                              >
+                                <img
+                                  style={{
+                                    width: "100%",
+                                    height: "300px",
+                                  }}
+                                  src={`http://localhost:3000/images/${
+                                    // post.Pictures[postIndex].id
+                                    post.Pictures[currentImages[postIndex]].id
+                                  }`}
+                                  alt={`Post Image ${currentImages[postIndex]}`}
+                                />
+                              </Button>
                             )}
 
                             <Button
@@ -894,7 +905,7 @@ function Home(props) {
                                 See Comments
                               </Button>
 
-                              <Box>
+                              <Box className="pop up for comment">
                                 <BootstrapDialog
                                   // onClose={handleClosePost}
                                   onClose={() => {
@@ -949,7 +960,8 @@ function Home(props) {
                                         width: {
                                           lg: "700px",
                                         },
-                                        maxheight: "100vh",
+                                        // maxheight: "100vh",
+                                        height: "80vh",
                                         // padding: "10px",
                                       }}
                                     >
@@ -1088,21 +1100,168 @@ function Home(props) {
                                                   </>
                                                 );
                                               })}
+
+                                            {comments.length > 5 && (
+                                              <Button
+                                                className="moreComment"
+                                                onClick={() => {
+                                                  handleMoreComment(
+                                                    post.id,
+                                                    postIndex
+                                                  );
+                                                }}
+                                                sx={{
+                                                  textTransform: "none",
+                                                  marginLeft: "20px",
+                                                }}
+                                              >
+                                                See more comment
+                                              </Button>
+                                            )}
                                           </Box>
                                         </Box>
+                                      </Box>
+                                    </Box>
+                                  </DialogContent>
+                                </BootstrapDialog>
+                              </Box>
 
-                                        <Button
-                                          className="moreComment"
-                                          onClick={() => {
-                                            handleMoreComment(
-                                              post.id,
-                                              postIndex
-                                            );
+                              <Box className="pop up for image">
+                                <BootstrapDialog
+                                  // onClose={handleClosePost}
+                                  onClose={() => {
+                                    handleCloseImage(post.id, postIndex);
+                                  }}
+                                  aria-labelledby="customized-dialog-title"
+                                  // open={openPost}
+                                  open={showImage[postIndex]}
+                                  className="custom-dialog"
+                                  // sx={{ maxWidth: "800px" }}
+                                >
+                                  <Box
+                                    sx={{
+                                      height: {
+                                        lg: "70px",
+                                        md: "100px",
+                                        sm: "80px",
+                                        xs: "100px",
+                                      },
+                                    }}
+                                    onClose={() => {
+                                      handleCloseImage(post.id, postIndex);
+                                    }}
+                                  >
+                                    <IconButton
+                                      sx={{ float: "right" }}
+                                      onClick={() => {
+                                        handleCloseImage(post.id, postIndex);
+                                      }}
+                                    >
+                                      <CloseIcon />
+                                    </IconButton>
+                                    <Typography
+                                      sx={{
+                                        alignItem: "center",
+                                        // float: "left",
+                                        textAlign: "Center",
+
+                                        marginTop: "20px",
+                                        fontSize: "20px",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      Pictures
+                                    </Typography>
+                                  </Box>
+
+                                  <DialogContent dividers>
+                                    <Box
+                                      sx={{
+                                        // border: "1px solid black",
+                                        width: {
+                                          lg: "700px",
+                                        },
+                                        // maxheight: "100vh",
+                                        // height: "80vh",
+                                        // padding: "10px",
+                                      }}
+                                    >
+                                      <Box
+                                        sx={{
+                                          display: "block",
+
+                                          // justifyContent: "center",
+                                        }}
+                                      >
+                                        <Box
+                                          sx={{
+                                            display: "flex",
+                                            width: {
+                                              lg: "600px",
+                                            },
                                           }}
-                                          sx={{ textTransform: "none" }}
                                         >
-                                          See more comment
-                                        </Button>
+                                          <Box
+                                            sx={{
+                                              width: "100%",
+                                              display: "flex",
+                                              justifyContent: "center",
+                                              alignItem: "center",
+                                            }}
+                                          >
+                                            <Button
+                                              sx={{ width: "10px" }}
+                                              disabled={
+                                                currentImages[postIndex] === 0
+                                              }
+                                              onClick={() =>
+                                                handleNavigation(
+                                                  postIndex,
+                                                  "left"
+                                                )
+                                              }
+                                            >
+                                              <ChevronLeftIcon />
+                                            </Button>
+                                            {post.Pictures &&
+                                              post.Pictures.length > 0 && (
+                                                <img
+                                                  style={{
+                                                    width: "100%",
+                                                    height: {
+                                                      lg: "300px",
+                                                      md: "300px",
+                                                      sm: "300px",
+                                                      xs: "100px",
+                                                    },
+                                                  }}
+                                                  src={`http://localhost:3000/images/${
+                                                    // post.Pictures[postIndex].id
+                                                    post.Pictures[
+                                                      currentImages[postIndex]
+                                                    ].id
+                                                  }`}
+                                                  alt={`Post Image ${currentImages[postIndex]}`}
+                                                />
+                                              )}
+
+                                            <Button
+                                              disabled={
+                                                currentImages[postIndex] ===
+                                                post.Pictures.length - 1
+                                              }
+                                              onClick={() =>
+                                                handleNavigation(
+                                                  postIndex,
+                                                  "right"
+                                                )
+                                              }
+                                            >
+                                              <KeyboardArrowRightIcon />
+                                            </Button>
+                                          </Box>
+                                          <Divider />
+                                        </Box>
                                       </Box>
                                     </Box>
                                   </DialogContent>

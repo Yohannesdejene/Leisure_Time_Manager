@@ -264,12 +264,9 @@ function Recommend() {
               {recommend && recommend.recommendedProducts && (
                 <>
                   {recommend.recommendedProducts.length == 0 && (
-                    <p
-                      style={{
-                        width: "300px",
-                      }}
-                    >
-                      Sorry We can't find your match
+                    <p style={{ display: "flex" }}>
+                      Sorry We have nothing to recommend you for this amount of
+                      money
                     </p>
                   )}
                   {recommend.recommendedProducts.length > 0 && (
@@ -296,7 +293,7 @@ function Recommend() {
                                 className="container"
                                 sx={{
                                   marginTop: "10px",
-                                  border: "1px solid black",
+                                  border: "1px solid #E0DFDF",
                                   // ml: {
                                   //   lg: "40%",
                                   //   md: "20%",
@@ -324,6 +321,16 @@ function Recommend() {
                                     mb: "20px",
                                   }}
                                 >
+                                  <Typography sx={{ color: "black" }}>
+                                    You can enjoy this
+                                    <span>
+                                      {" "}
+                                      {product.productName}{" "}
+                                    </span>from {product.place.name}
+                                  </Typography>
+                                </Box>
+                                <Divider />
+                                <Box sx={{ display: "flex", mt: "20px" }}>
                                   <Typography
                                     sx={{
                                       fontWeight: "bold",
@@ -332,16 +339,6 @@ function Recommend() {
                                     }}
                                   >
                                     {product.place.name}
-                                  </Typography>
-                                </Box>
-                                <Divider />
-                                <Box sx={{ display: "flex", mt: "20px" }}>
-                                  <Typography>
-                                    You can enjoy this
-                                    <span>
-                                      {" "}
-                                      {product.productName}{" "}
-                                    </span>from {product.place.name}
                                   </Typography>
                                 </Box>
                                 <Box sx={{ display: "flex" }}>
